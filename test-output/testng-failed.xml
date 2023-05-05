@@ -6,7 +6,7 @@
       <class name="todoSite.todo">
         <methods>
           <include name="setup"/>
-          <include name="addToDo"/>
+          <include name="register"/>
         </methods>
       </class> <!-- todoSite.todo -->
     </classes>

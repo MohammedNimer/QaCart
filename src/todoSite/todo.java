@@ -23,34 +23,54 @@ public class todo {
 	public void register() throws InterruptedException {
 		driver.get("https://todo.qacart.com/");
 	Thread.sleep(1000);
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div[1]/div/div/a[3]")).click();
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/div[1]/div/input")).sendKeys("Mohammed");
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/div[2]/div/input")).sendKeys("Nimer");
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/div[3]/div/input")).sendKeys("mohammed.nimer.98@gmail.com");
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/div[4]/div/input")).sendKeys("Mo7star@");
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/div[5]/div/input")).sendKeys("Mo7star@");
+		driver.findElement(By.cssSelector("[href='/signup']")).click();
+		driver.findElement(By.cssSelector("[data-testid='first-name']")).sendKeys("Mohammed");
+		driver.findElement(By.cssSelector("[data-testid='last-name']")).sendKeys("Nimer");
+		driver.findElement(By.cssSelector("[data-testid='email']")).sendKeys("mohammed.nimer.98@gmail.com");
+		driver.findElement(By.cssSelector("[data-testid='password']")).sendKeys("Mo7star@");
+		driver.findElement(By.cssSelector("[data-testid='confirm-password']")).sendKeys("Mo7star@");
 		Thread.sleep(1000);
-		driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/button/span[1]")).click();
+		driver.findElement(By.cssSelector("[data-testid='submit']")).click();
+		Thread.sleep(1000);
+
+		boolean oppenedAccountURL=driver.getCurrentUrl().equals("https://todo.qacart.com/todo");
+		System.out.println(oppenedAccountURL+" : New account oppened");
+		if(oppenedAccountURL) {
+			myAssertion.assertEquals(oppenedAccountURL, true);
+			myAssertion.assertAll();
+		}
 		
-		boolean emailAlreadyRegisteredMessage =driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/div[6]")).isDisplayed(); //
+		else {
+		boolean emailAlreadyRegisteredMessage =driver.findElement(By.cssSelector("[class='MuiAlert-message']")).isDisplayed();
 		System.out.println(emailAlreadyRegisteredMessage+" : emailAlreadyRegisteredMessage displayed");
+
 		myAssertion.assertEquals(emailAlreadyRegisteredMessage, true);
 		myAssertion.assertAll();
+		}
+
 	}
 	
 @Test(priority = 2)
 public void addToDo() throws InterruptedException {
+	Thread.sleep(1000);
+	if(driver.getCurrentUrl().equals("https://todo.qacart.com/todo")) {
+		driver.findElement(By.cssSelector("[class='MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary']")).click();
+	}
+	Thread.sleep(1000);
+
 	driver.get("https://todo.qacart.com/");
-	driver.findElement(By.id("email")).sendKeys("mohammed.nimer.98@gmail.com");
-	driver.findElement(By.id("password")).sendKeys("Mo7star@");
-	driver.findElement(By.name("submit")).click();
+	Thread.sleep(1000);
+
+	driver.findElement(By.cssSelector("[data-testid='email']")).sendKeys("mohammed.nimer.98@gmail.com");
+	driver.findElement(By.cssSelector("[data-testid='password']")).sendKeys("Mo7star@");
+	driver.findElement(By.cssSelector("[data-testid='submit']")).click();
 	Thread.sleep(2000);
-	driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/div/button")).click();
-	driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/div/div/input")).sendKeys("firstToDo");
-	Thread.sleep(2000);
-	driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/button")).click();
+	driver.findElement(By.cssSelector("[class='MuiButtonBase-root MuiIconButton-root']")).click();
+	driver.findElement(By.cssSelector("[data-testid='new-todo']")).sendKeys("firstToDo");
+	Thread.sleep(1000);
+	driver.findElement(By.cssSelector("[data-testid='submit-newTask']")).click();
 	Thread.sleep(1500);
-	boolean FirstToDo= driver.findElement(By.xpath("//*[@id=\"root\"]/div[2]/div/div/div[2]")).isDisplayed();
+	boolean FirstToDo= driver.findElement(By.cssSelector("[data-testid='todo-item']")).isDisplayed(); 
 	System.out.println(FirstToDo+" : ToDo Item displayed");
 	myAssertion.assertEquals(FirstToDo, true);
 	myAssertion.assertAll();
@@ -59,7 +79,7 @@ public void addToDo() throws InterruptedException {
 @Test(priority = 3)
 public void deleteToDo() throws InterruptedException {
 	
-	Thread.sleep(2000);
+	Thread.sleep(1000);
 	driver.findElement(By.cssSelector("[data-testid='delete']")).click();
 	Thread.sleep(2000);	
 	
@@ -69,7 +89,4 @@ public void deleteToDo() throws InterruptedException {
 	myAssertion.assertEquals(actual, "No Available Todos");
 	myAssertion.assertAll();
 }
-
-
-
 }
